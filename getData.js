@@ -1,9 +1,9 @@
 const mysql = require("mysql2");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "root",
+  user: "dbuser",
   password: "21061983",
   database: "test",
 });
@@ -38,7 +38,8 @@ module.exports.userLogin = (pass, id, callback) => {
       console.log(err);
     } else {
       if (result[0]) {
-        bcrypt.compare(toString(pass), result[0].pass).then((result) => {
+        bcrypt.compare(pass.toString(), result[0].pass).then((result) => {
+          console.log(result);
           if (result) {
             callback(id, result);
           } else {
@@ -46,16 +47,14 @@ module.exports.userLogin = (pass, id, callback) => {
           }
         });
       } else {
-        return console.log("Произошла какая то непредвиденная хуйня");
+        return console.log("Произошла какая то непредвиденная #####");
       }
     }
   });
 };
 
 module.exports.userRegister = (data, callback) => {
-  const salt = bcrypt.genSaltSync(10);
-
-  bcrypt.hash(toString(data.pass), salt).then((hash) => {
+  bcrypt.hash(data.pass.toString(), 8).then((hash) => {
     let query =
       "INSERT INTO user values(null,'" +
       data.name +
@@ -81,7 +80,9 @@ module.exports.sendMessage = (id, data, path, callback) => {
     data.message +
     "'," +
     id +
-    ",'"+path+"',NOW()) ;";
+    ",'" +
+    path +
+    "',NOW()) ;";
   connection.query(query, (err, result) => {
     if (err) {
       console.log(err);
@@ -93,26 +94,42 @@ module.exports.sendMessage = (id, data, path, callback) => {
   callback();
 };
 
-module.exports.getArray=(id,callback)=>{
-    let query = "Select * from message where user_id > 0;"
-    connection.query(query, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          callback(result);
-        }
-      });
+module.exports.getArray = (id, callback) => {
+  let query = "Select * from message where user_id > 0;";
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      callback(result);
+    }
+  });
+};
 
-    
-}
+module.exports.setCorrect = (message_id, message, path, callback) => {
+  let query =
+    "UPDATE message SET message='" +
+    message +
+    "',fileName= '" +
+    path +
+    "',date=NOW() where id=" +
+    message_id +
+    ";";
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      callback();
+    }
+  });
+};
 
-module.exports.setCorrect=(message_id,message,path,callback)=>{
-    let query = "UPDATE message SET message='"+message+"',fileName= '"+path+"',date=NOW() where id="+message_id+";"
-    connection.query(query, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          callback();
-        }
-      });
-}
+module.exports.deleteMessage = (message_id, callback) => {
+  let query = "DELETE FROM message where id =" + message_id + ";";
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      callback();
+    }
+  });
+};

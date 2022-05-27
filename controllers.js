@@ -4,7 +4,6 @@ const keys = require("./key");
 const fileMiddleware = require("./middleware/upload");
 
 module.exports.login = async function (req, res) {
-  console.log(req.body);
   Data.findLoginUser(req.body, (result) => {
     if (result[0]) {
       Data.userLogin(req.body.pass, result[0].id, (id, a) => {
@@ -26,8 +25,6 @@ module.exports.login = async function (req, res) {
             email: req.body.login,
           });
         } else {
-          console.log("Пароль не подошёл");
-
           res.status(401).json({
             message: "Неверный пароль. Вы не авторизованы",
             resultCode: 1,
@@ -35,10 +32,9 @@ module.exports.login = async function (req, res) {
         }
       });
     } else {
-      console.log("Неверный логин");
       return res
         .status(401)
-        .json({ message: "Данный email в системене зарегистрирован" });
+        .json({ message: "Данный email в системене не зарегистрирован" });
     }
   });
 };
@@ -64,6 +60,7 @@ module.exports.register = async function (req, res) {
 
 module.exports.sendMessage = async function (req, res) {
   try {
+    console.log(req.body);
     if (req.headers.authorization) {
       const token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, keys.jwt);
@@ -96,7 +93,7 @@ module.exports.me = async function (req, res) {
     }
   } catch (err) {
     console.log(err);
-    res.json({mess:" please login"});
+    res.json({ mess: " please login" });
   }
 };
 
@@ -122,6 +119,27 @@ module.exports.correct = async function (req, res) {
     console.log(err);
     res.json({
       mess: "message not corrected, try later",
+    });
+  }
+};
+
+module.exports.delete = async function (req, res) {
+  try {
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, keys.jwt);
+      if (decoded) {
+        Data.deleteMessage(req.body.message_id, () => {
+          res.json({
+            mess: "message deleted",
+          });
+        });
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({
+      mess: "message not deleted, try later",
     });
   }
 };

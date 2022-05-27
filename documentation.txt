@@ -1,0 +1,122 @@
+url = "http://92.53.119.145"
+Здравствуйте, хотел использовать swagger но не успел разобраться /api-docs
+
+************************************************************
+Получение массива постов.
+get:  /api/me
+
+body
+respons:
+        [
+    {
+        "id": <message id>,
+        "message": "correct",
+        "user_id": <user id>,
+        "fileName": <file name in public>,
+        "date": "data of file create"
+    },
+    
+]
+
+************************************************************
+Регистрация пользователя
+post:   /api/registration
+
+body
+request:
+{
+  "login": <Your email as login>,
+  "pass":<password>,
+  "name":<your name>
+}
+
+status 200 response:
+{
+    "resultCode": 0,
+    "message": "Пользователь создан"
+}
+
+status 409 response:
+{
+    "resultCode": 1,
+    "message": "Такой email уже занят. Попробуйте другой"
+}
+
+**********************************************************
+Получение токена
+post:  /api/login
+
+body
+request:
+{
+    "login":<Your email as login>,
+    "pass":<password>
+}
+
+status 200 response:
+{
+    "message": "Вы авторизованы",
+    "token": <Bearer token>,
+    "resultCode": 0,
+    "email": "your email as login"
+}
+
+status 401 response:
+{
+    "message": "Неверный пароль. Вы не авторизованы",
+    "resultCode": 1
+}
+
+or
+
+{
+    "message": "Данный email в системене не зарегистрирован"
+}
+
+*****************************************************************
+Отправка сообшения
+post:  /api/sendMessage
+
+body
+request:
+{
+    "message":<Your message>
+}
+
+ status 200 response:
+{
+    "name": "message created"
+}
+
+******************************************************************
+Изменение сообщения
+post:  /api/correct
+
+body
+request:
+{
+    "message": <your new message>,
+    "message_id: <message id>
+}
+
+status 200 response:
+{
+    "mess": "message corrected"
+}
+
+*******************************************************************
+Удаление сообщения
+post:  /api/delete
+
+bodyrequest:
+{
+    "message_id":<id of deleted message>
+}
+
+status 200 response:
+{
+    "mess": "message deleted"
+}
+
+*****************************************************************
+ КОНЕЦ

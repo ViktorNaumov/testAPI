@@ -5,7 +5,6 @@ const storage = multer.diskStorage({
     callback(null, "uploads/");
   },
   filename(req, file, callback) {
-    console.log(req.headers.authorization);
     const name =
       new Date().toISOString().replace(/:/g, "-") + "-" + file.originalname;
 

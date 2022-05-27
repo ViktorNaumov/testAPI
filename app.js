@@ -3,7 +3,30 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
-const Routs=require('./routs')
+const Routs = require("./routs");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+const swaggerOptions = {
+  definition: {
+    info: {
+      title: "test blog API",
+      description: "API information",
+      contact: {
+        name: "Viktor Naumov",
+      },
+      servers: [{url:"http://localhost:3001"}],
+    },
+  },
+  apis: ["routs.js"],
+};
+var options = {
+    explorer: true
+  };
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs,options));
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -22,29 +45,9 @@ app.use(morgan("dev"));
 
 
 
+
+
+
 app.use("/api", Routs);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = app;

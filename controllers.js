@@ -66,7 +66,8 @@ module.exports.sendMessage = async function (req, res) {
       const decoded = jwt.verify(token, keys.jwt);
       if (decoded) {
         fileMiddleware.any()(req, res, () => {
-          path = req.files[0].path.split("uploads")[1].split("\\")[1];
+          console.log(req.files[0].path.split("uploads")[1])
+          path = req.files[0].path.split("uploads")[1].split("/")[1];
           Data.sendMessage(decoded.user_id, req.body, path, () => {});
 
           res.json({

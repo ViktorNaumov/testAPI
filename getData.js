@@ -95,7 +95,7 @@ module.exports.sendMessage = (id, data, path, callback) => {
 };
 
 module.exports.getArray = (id, callback) => {
-  let query = "select message.id,message.message,message.fileName,message.date,user.name  from message INNER JOIN user using(id);";
+  let query = "select message.id,message.message,message.fileName,message.date,user.name from message INNER JOIN user;";
   connection.query(query, (err, result) => {
     if (err) {
       console.log(err);

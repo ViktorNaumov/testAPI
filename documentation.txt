@@ -8,12 +8,12 @@ get:  /api/me
 body
 respons:
         [
-    {
+     {
         "id": <message id>,
         "message": "correct",
-        "user_id": <user id>,
-        "fileName": <file name in public>,
-        "date": "data of file create"
+        "fileName": <path tofile>,
+        "date": <date>,
+        "name": "user name"
     },
     
 ]

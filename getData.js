@@ -8,6 +8,8 @@ const connection = mysql.createConnection({
   database: "test",
 });
 
+// user: "root"
+
 connection.connect((err) => {
   if (err) {
     console.log(err);
@@ -16,6 +18,13 @@ connection.connect((err) => {
     console.log("База данных подключена");
   }
 });
+
+const loop =()=>{
+  connection.ping(()=>{
+    console.log("ping")
+  })
+}
+setInterval(loop,1000*60*60);
 
 module.exports.findLoginUser = (data, callback) => {
   "Здесь делаем запрос в БД получаем id юзера соответствующего login";

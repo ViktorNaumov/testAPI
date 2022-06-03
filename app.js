@@ -12,10 +12,10 @@ const swaggerOptions = {
     info: {
       title: "test blog API",
       description: "API information",
-      contact: {
+      contacts: {
         name: "Viktor Naumov",
       },
-      servers: [{url:"http://localhost:3001"}],
+      servers: ["http://localhost:3001"],
     },
   },
   apis: ["routs.js"],
